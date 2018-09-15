@@ -23,6 +23,7 @@
         android:id="@+id/listTasks">
 
     </android.support.v7.widget.RecyclerView>
+
     
 
 

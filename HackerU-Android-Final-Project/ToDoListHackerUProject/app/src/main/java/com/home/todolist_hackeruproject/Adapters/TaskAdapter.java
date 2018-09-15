@@ -30,15 +30,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> implements
         this.listItemClickedListener = listItemClickedListener;
         String title, content;
 
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                title = jsonArray.getJSONObject(i).getString("title");
-                content = jsonArray.getJSONObject(i).getString("content");
-                int taskId = jsonArray.getJSONObject(i).getInt("task_id");
-                Task task = new Task(title, content, taskId);
-                tasks.add(task);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    title = jsonArray.getJSONObject(i).getString("title");
+                    content = jsonArray.getJSONObject(i).getString("content");
+                    int taskId = jsonArray.getJSONObject(i).getInt("task_id");
+                    Task task = new Task(title, content, taskId);
+                    tasks.add(task);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

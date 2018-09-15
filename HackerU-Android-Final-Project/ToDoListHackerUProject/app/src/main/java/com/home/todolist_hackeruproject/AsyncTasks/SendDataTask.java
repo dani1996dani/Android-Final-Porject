@@ -43,6 +43,7 @@ public class SendDataTask extends AsyncTask<String, Void, String> {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setUseCaches(false);
+                connection.setConnectTimeout(Consts.SERVER_TIMEOUT);
 
                 JSONObject dataToServer = new JSONObject();
                 dataToServer.put("token", strings[0]);

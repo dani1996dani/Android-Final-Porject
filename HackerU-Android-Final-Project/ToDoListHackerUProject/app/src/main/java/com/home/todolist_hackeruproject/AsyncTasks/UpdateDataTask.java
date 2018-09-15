@@ -1,9 +1,12 @@
 package com.home.todolist_hackeruproject.AsyncTasks;
 
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.home.todolist_hackeruproject.Consts;
 import com.home.todolist_hackeruproject.StreamManager;
+import com.home.todolist_hackeruproject.Task;
 
 
 import org.json.JSONException;
@@ -19,11 +22,29 @@ import java.net.URL;
 
 public class UpdateDataTask extends AsyncTask<String, Void, String> {
 
+    private SuccessfulUpdateDataListener successfulUpdateDataListener;
+    int taskPosition;
+    Task task;
+    String newTitle,newContent;
+
+
+    public UpdateDataTask(SuccessfulUpdateDataListener successfulUpdateDataListener, int taskPosition, Task task, String newTitle, String newContent) {
+        this.successfulUpdateDataListener = successfulUpdateDataListener;
+        this.taskPosition = taskPosition;
+        this.task = task;
+        this.newTitle = newTitle;
+        this.newContent = newContent;
+    }
+
+
     /**
      * Sending POST to server - sending the task to update in JSON format
      **/
+
+
     @Override
     protected String doInBackground(String... strings) {
+
         String result = "";
         URL url;
         InputStream inputStream = null;
@@ -41,6 +62,7 @@ public class UpdateDataTask extends AsyncTask<String, Void, String> {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setUseCaches(false);
+            connection.setConnectTimeout(Consts.SERVER_TIMEOUT);
 
             outputStream = connection.getOutputStream();
             outputStream.write(dataToServer.toString().getBytes());
@@ -61,5 +83,14 @@ public class UpdateDataTask extends AsyncTask<String, Void, String> {
             StreamManager.getStreamManager().closeConnections(inputStream, connection);
         }
         return result;
+    }
+
+    @Override
+    protected void onPostExecute(String s) {
+        if(s.equals("success")){
+            successfulUpdateDataListener.onSuccessfulTaskUpdate(taskPosition,task,newTitle,newContent);
+        }
+        else
+            successfulUpdateDataListener.onFailedTaskUpdate();
     }
 }

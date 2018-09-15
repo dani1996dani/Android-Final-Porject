@@ -11,12 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.home.todolist_hackeruproject.Adapters.ListItemClickedListener;
 import com.home.todolist_hackeruproject.AsyncTasks.DeleteDataTask;
 import com.home.todolist_hackeruproject.AsyncTasks.FinishedGettingTasksListener;
 import com.home.todolist_hackeruproject.AsyncTasks.GetDataTask;
 import com.home.todolist_hackeruproject.AsyncTasks.SendDataTask;
+import com.home.todolist_hackeruproject.AsyncTasks.SuccessfulUpdateDataListener;
 import com.home.todolist_hackeruproject.AsyncTasks.UpdateDataTask;
 import com.home.todolist_hackeruproject.Consts;
 import com.home.todolist_hackeruproject.Credentials.CredentialsManager;
@@ -30,7 +32,7 @@ import org.json.JSONException;
 
 import java.util.regex.Pattern;
 
-public class ListActivity extends Activity implements ListItemClickedListener, FinishedGettingTasksListener {
+public class ListActivity extends Activity implements ListItemClickedListener, FinishedGettingTasksListener,SuccessfulUpdateDataListener {
 
     RecyclerView taskList;
     String userToken;
@@ -100,8 +102,11 @@ public class ListActivity extends Activity implements ListItemClickedListener, F
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    //TODO: handle if task adater is nuul (if never got tasks from server)
-                    taskAdapter.addTaskToList(newTask);
+
+                    //if the taskAdapter never got assigned (if never got tasks from the server because it is offline)
+                    if (taskAdapter != null) {
+                        taskAdapter.addTaskToList(newTask);
+                    }
                     alertDialog.dismiss();
                 } else {
                     TaskManager.showInvalidTaskAlert(ListActivity.this);
@@ -156,18 +161,18 @@ public class ListActivity extends Activity implements ListItemClickedListener, F
                 }
 
                 //sets new title and content values in the currentTask object, that is present in the list of the taskAdapter.
-                currentTask.setTitle(newTitle);
-                currentTask.setContent(newContent);
+//                currentTask.setTitle(newTitle);
+//                currentTask.setContent(newContent);
 
                 //send the new task data to the server.
                 try {
-                    new UpdateDataTask().execute(userToken, "update", currentTask.toJSONObject().toString());
+                    new UpdateDataTask(ListActivity.this,position,currentTask,newTitle,newContent).execute(userToken, "update", currentTask.toJSONObject().toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 alertDialog.dismiss();
                 //TODO:notifyItemChanged should be called when you get the response "success" from the server, and not here. (move this to postExecute of UpdateAsyncTask).
-                taskAdapter.notifyItemChanged(position);
+
             }
         });
 
@@ -189,5 +194,17 @@ public class ListActivity extends Activity implements ListItemClickedListener, F
     public void onFinishedGettingTasks(JSONArray data) {
         taskAdapter = new TaskAdapter(data, this);
         taskList.setAdapter(taskAdapter);
+    }
+
+    @Override
+    public void onSuccessfulTaskUpdate(int taskPosition, Task task, String newTitle, String newContent) {
+        taskAdapter.notifyItemChanged(taskPosition);
+        task.setTitle(newTitle);
+        task.setContent(newContent);
+    }
+
+    @Override
+    public void onFailedTaskUpdate() {
+        new AlertDialog.Builder(this).setTitle("Could not update task.").setMessage("Please try again.").show();
     }
 }

@@ -35,6 +35,7 @@ public class LoginSignupTask extends AsyncTask<String, String, JSONObject> {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setUseCaches(false);
+            connection.setConnectTimeout(Consts.SERVER_TIMEOUT);
 
             inputStream = connection.getInputStream();
 

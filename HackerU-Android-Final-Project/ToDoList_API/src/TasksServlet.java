@@ -50,7 +50,7 @@ public class TasksServlet extends HttpServlet {
                 result = taskId > -1 ? String.valueOf(taskId) : "fail";
                 break;
             case "update":
-                TasksDatabase.updateTaskInDatabase(token, data);
+                result = (TasksDatabase.updateTaskInDatabase(token, data)) ? "success" : "fail";
                 break;
 
             default:

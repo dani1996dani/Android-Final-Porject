@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center|top"
+    android:orientation="vertical"
+    android:paddingTop="30dp"
+    tools:context=".Activities.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loginFragmentContainer">
+
+    </FrameLayout>
+
+    <!--<TextView-->
+        <!--android:layout_width="@dimen/input_width"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/textError"-->
+        <!--android:textColor="#ff2424"-->
+        <!--android:visibility="invisible"-->
+        <!--android:textStyle="bold"-->
+        <!--android:background="@color/button_color"-->
+        <!--android:textAlignment="center"-->
+
+        <!--android:layout_marginBottom="100dp"-->
+        <!--android:letterSpacing="0.03"-->
+        <!--android:padding="10dp"-->
+        <!--android:layout_gravity="center|top"-->
+        <!--android:textSize="18sp"/>-->
+    <!--<EditText-->
+        <!--android:id="@+id/input_username"-->
+        <!--style="@style/input_text"-->
+        <!--android:hint="@string/email" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/input_password"-->
+        <!--style="@style/input_text"-->
+        <!--android:hint="@string/input_login_password"-->
+        <!--android:inputType="textPassword" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/btn_login"-->
+        <!--style="@style/button"-->
+        <!--android:onItemClick="loginBtn"-->
+        <!--android:text="Register" />-->
+
+</LinearLayout>
